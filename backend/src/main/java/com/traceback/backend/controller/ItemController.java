@@ -4,7 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import com.traceback.backend.model.Item;
+import java.security.Principal;
+import com.traceback.backend.dto.ItemRequestDTO;
+import com.traceback.backend.dto.ItemResponseDTO;
 import com.traceback.backend.service.ItemService;
 import jakarta.validation.Valid;
 
@@ -19,21 +21,25 @@ public class ItemController {
     }
 
     @PostMapping
-    public ResponseEntity<Item> addItem(@Valid @RequestBody Item item){
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.addItem(item));
+    public ResponseEntity<ItemResponseDTO> addItem(@Valid @RequestBody ItemRequestDTO itemDto, Principal principal){
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.addItem(itemDto, principal.getName()));
     }
+    
     @GetMapping
-    public List<Item> getItems(){
+    public List<ItemResponseDTO> getItems(){
         return service.getItems();
     }
+    
     @GetMapping("/{id}")
-    public ResponseEntity<Item> getItemById(@PathVariable Long id){
+    public ResponseEntity<ItemResponseDTO> getItemById(@PathVariable Long id){
         return ResponseEntity.ok(service.getItemById(id));
     }
+    
     @PutMapping("/{id}")
-    public Item updateItem(@PathVariable Long id, @Valid @RequestBody Item item){
-        return service.update(id,item);
+    public ItemResponseDTO updateItem(@PathVariable Long id, @Valid @RequestBody ItemRequestDTO itemDto){
+        return service.update(id, itemDto);
     }
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItem(@PathVariable Long id){
         service.deleteItem(id);
