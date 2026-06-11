@@ -14,6 +14,7 @@ import com.traceback.backend.model.Item;
 import com.traceback.backend.model.ItemStatus;
 import com.traceback.backend.model.ItemType;
 import com.traceback.backend.model.User;
+import com.traceback.backend.model.ClaimStatus;
 import com.traceback.backend.repository.ClaimRepository;
 import com.traceback.backend.repository.ItemRepository;
 import com.traceback.backend.repository.UserRepository;
@@ -69,6 +70,22 @@ public class ClaimService {
         return claimRepo.findByClaimerId(user.getId()).stream()
             .map(this::mapToDTO)
             .collect(Collectors.toList());
+    }
+
+    public ClaimResponseDTO updateClaimStatus(Long claimId, ClaimStatus status) {
+        Claim claim = claimRepo.findById(claimId)
+            .orElseThrow(() -> new ResourceNotFoundException("Claim not found"));
+
+        claim.setStatus(status);
+        
+        if (status == ClaimStatus.APPROVED) {
+            Item item = claim.getItem();
+            item.setStatus(ItemStatus.RESOLVED);
+            itemRepo.save(item);
+        }
+
+        Claim updatedClaim = claimRepo.save(claim);
+        return mapToDTO(updatedClaim);
     }
 
     private ClaimResponseDTO mapToDTO(Claim claim) {
