@@ -7,7 +7,7 @@ import './ItemDetail.css';
 export default function ItemDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isAdmin } = useAuth();
 
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -114,6 +114,7 @@ export default function ItemDetailPage() {
   const isLost = item.type === 'LOST';
   const typeClass = isLost ? 'lost' : 'found';
   const isOwner = user?.username === item.reporter?.username;
+  const canDelete = isOwner || isAdmin;
   const canClaim =
     isAuthenticated &&
     !isOwner &&
@@ -180,7 +181,7 @@ export default function ItemDetailPage() {
                   </button>
                 )}
 
-                {isOwner && (
+                {canDelete && (
                   <button
                     className="btn btn-danger btn-sm"
                     onClick={handleDelete}
