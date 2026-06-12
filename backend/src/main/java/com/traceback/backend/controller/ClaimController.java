@@ -34,6 +34,11 @@ public class ClaimController {
         return claimService.getMyClaims(principal.getName());
     }
 
+    @GetMapping("/admin/claims")
+    public List<ClaimResponseDTO> getAllClaims() {
+        return claimService.getAllClaims();
+    }
+
     @PutMapping("/admin/claims/{claimId}/status")
     public ResponseEntity<ClaimResponseDTO> updateClaimStatus(
             @PathVariable Long claimId,

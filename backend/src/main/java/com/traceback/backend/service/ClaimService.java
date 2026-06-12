@@ -63,6 +63,12 @@ public class ClaimService {
         return mapToDTO(savedClaim);
     }
 
+    public List<ClaimResponseDTO> getAllClaims() {
+        return claimRepo.findAll().stream()
+            .map(this::mapToDTO)
+            .collect(Collectors.toList());
+    }
+
     public List<ClaimResponseDTO> getMyClaims(String username) {
         User user = userRepo.findByUsername(username)
             .orElseThrow(() -> new ResourceNotFoundException("User not found"));

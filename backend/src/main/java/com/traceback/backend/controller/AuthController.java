@@ -45,4 +45,18 @@ public class AuthController {
         User registeredUser = userService.registerUser(user);
         return ResponseEntity.ok(registeredUser);
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<com.traceback.backend.dto.UserResponseDTO> getCurrentUser(java.security.Principal principal) {
+        User user = userService.getUserByUsername(principal.getName());
+        com.traceback.backend.dto.UserResponseDTO dto = com.traceback.backend.dto.UserResponseDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .role(user.getRole())
+                .createdAt(user.getCreatedAt())
+                .build();
+        return ResponseEntity.ok(dto);
+    }
 }
