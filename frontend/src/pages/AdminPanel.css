@@ -1,0 +1,113 @@
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.admin-header p {
+  font-size: var(--font-size-sm);
+  margin-top: var(--space-xs);
+}
+
+.admin-filters {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.admin-claims-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.admin-claim-card {
+  border-radius: var(--radius-lg);
+}
+
+.admin-claim-card:hover {
+  transform: none;
+  box-shadow: var(--shadow-md);
+}
+
+.admin-claim-content {
+  padding: var(--space-lg);
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr auto;
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+.admin-claim-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.section-label {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.admin-item-title {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  transition: color var(--transition-fast);
+}
+
+.admin-item-title:hover {
+  color: var(--color-found-dark);
+}
+
+.admin-claimer-name {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.admin-proof-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.admin-claim-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-sm);
+  min-width: 140px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+}
+
+@media (max-width: 768px) {
+  .admin-header {
+    flex-direction: column;
+  }
+
+  .admin-claim-content {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .admin-claim-actions {
+    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
