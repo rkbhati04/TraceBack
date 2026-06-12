@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.security.Key;
 import java.util.Date;
@@ -16,10 +17,13 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    // Ideally, this secret should be stored securely in application.properties or environment variables.
-    // We are using a securely generated key for HMAC-SHA256
-    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    
+    @Value("${jwt.secret}")
+    private String secretString;
+
+    private Key getSigningKey() {
+        byte[] keyBytes = io.jsonwebtoken.io.Decoders.BASE64.decode(secretString);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }    
     // Token validity: 24 hours
     private static final long JWT_TOKEN_VALIDITY = 24 * 60 * 60 * 1000;
 
@@ -40,7 +44,7 @@ public class JwtUtil {
 
     // For retrieving any information from token we will need the secret key
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
     }
 
     // Check if the token has expired
@@ -69,7 +73,7 @@ public class JwtUtil {
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
-                .signWith(SECRET_KEY)
+                .signWith(getSigningKey())
                 .compact();
     }
 
